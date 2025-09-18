@@ -1,0 +1,2 @@
+ALTER SCHEMA public OWNER TO admin;
+GRANT ALL PRIVILEGES ON SCHEMA public TO admin;

@@ -1,0 +1,7 @@
+target
+.git
+.vscode
+.idea
+*.iml
+node_modules
+.env*

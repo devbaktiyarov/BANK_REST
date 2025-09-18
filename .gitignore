@@ -17,3 +17,5 @@ application-*.properties
 
 # OS
 .DS_Store
+
+docker-compose.dev.yml
