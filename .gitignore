@@ -1,0 +1,19 @@
+# Build
+/target/
+/build/
+
+# IDE
+/.idea/
+/.vscode/
+/*.iml
+
+# Logs
+*.log
+
+# Env configs
+*.env
+application-*.yml
+application-*.properties
+
+# OS
+.DS_Store
