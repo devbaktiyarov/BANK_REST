@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-add-autoincrement-to-users-id
+      author: devbaktiyarov
+      changes:
+        - addAutoIncrement:
+            tableName: users
+            columnName: id
+            columnDataType: BIGINT
