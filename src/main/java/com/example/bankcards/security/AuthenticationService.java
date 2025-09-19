@@ -6,5 +6,5 @@ import com.example.bankcards.dto.RefreshJwtTokenDto;
 
 public interface AuthenticationService {
     JwtTokenPairDto login(AuthenticationRequestDto authRequest);
-    JwtTokenPairDto refreshTokens(RefreshJwtTokenDto refreshRequest) 
+    JwtTokenPairDto refreshTokens(RefreshJwtTokenDto refreshRequest);
 }
