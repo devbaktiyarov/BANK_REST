@@ -32,9 +32,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new BadCredentialsException("Invalid email or password");
         }
 
-        return new JwtTokenPairDto(
-                jwtProvider.generateAccessToken(user),
-                jwtProvider.generateRefreshToken(user));
+        String accessToken = jwtProvider.generateAccessToken(user);
+        String refreshToken = jwtProvider.generateRefreshToken(user);
+
+        user.setLastRefreshToken(refreshToken);
+        userRepository.save(user);
+
+        return new JwtTokenPairDto(accessToken, refreshToken);
+
     }
 
     @Override
@@ -44,9 +49,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new BadCredentialsException("User not found"));
 
-        return new JwtTokenPairDto(
-                jwtProvider.generateAccessToken(user),
-                jwtProvider.generateRefreshToken(user));
+        if (!refreshRequest.getRefreshToken().equals(user.getLastRefreshToken())) {
+            throw new BadCredentialsException("Invalid refresh token");
+        }
+
+        String accessToken = jwtProvider.generateAccessToken(user);
+        String refreshToken = jwtProvider.generateRefreshToken(user);
+
+        user.setLastRefreshToken(refreshToken);
+        userRepository.save(user);
+
+        return new JwtTokenPairDto(accessToken, refreshToken);
     }
 
 }

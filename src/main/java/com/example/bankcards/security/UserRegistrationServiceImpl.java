@@ -1,5 +1,6 @@
 package com.example.bankcards.security;
 
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,11 +37,14 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         user.setEmail(requestDto.getEmail());
         user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         user.setRole(Role.ROLE_USER);
+
+        String newAccessToken = jwtProvider.generateAccessToken(user);
+        String newRefreshToken = jwtProvider.generateRefreshToken(user);
+
+        user.setLastRefreshToken(newRefreshToken);
         userRepository.save(user);
 
-        return new JwtTokenPairDto(
-                jwtProvider.generateAccessToken(user),
-                jwtProvider.generateRefreshToken(user));
+        return new JwtTokenPairDto(newAccessToken, newRefreshToken);
     
     }
 

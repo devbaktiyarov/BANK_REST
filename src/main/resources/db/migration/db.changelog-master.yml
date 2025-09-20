@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/migration/001-create-user-table.yml
   - include:
       file: db/migration/002-add-autoincrement-to-users-id.yml    
+  - include:
+      file: db/migration/003-add-last-refresh-token-to-users.yml    

@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-add-last-refresh-token-to-users
+      author: devbaktiyarov
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: last_refresh_token
+                  type: VARCHAR(512)
+                  constraints:
+                    nullable: true
