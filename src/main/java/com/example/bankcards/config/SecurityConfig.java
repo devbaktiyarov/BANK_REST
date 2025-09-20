@@ -33,8 +33,9 @@ public class SecurityConfig {
                         .requestMatchers(POST,
                                 "/v1/api/sign-up",
                                 "/v1/api/sign-in",
-                                "/v1/api/refresh",
-                                "/v3/api-docs/**",
+                                "/v1/api/refresh")
+                        .permitAll()
+                        .requestMatchers(GET, "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html")
                         .permitAll()

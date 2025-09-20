@@ -23,3 +23,6 @@ jwt:
     secret: ${JWT_REFRESH_SECRET:your-refresh-secret-key}
   subject: ${JWT_SUBJECT:user}
   issuer: ${JWT_ISSUER:bank-rest}
+
+cors:
+  allowed-origin: ${ALLOWED_ORIGIN:http://localhost:3000}
