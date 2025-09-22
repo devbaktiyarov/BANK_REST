@@ -46,6 +46,11 @@ public class GlobalExceptionHandler {
                 .body("User not found");
     }
 
-
+    @ExceptionHandler(CardNotFoundException.class)
+    public ResponseEntity<String> handleCardNotFoundException(CardNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
 
 }
