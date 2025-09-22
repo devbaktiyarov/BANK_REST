@@ -1,5 +1,7 @@
 package com.example.bankcards.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.bankcards.dto.CardCreationRequestDto;
@@ -7,11 +9,10 @@ import com.example.bankcards.dto.CardDto;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.CardStatus;
 import com.example.bankcards.entity.User;
+import com.example.bankcards.exception.CardNotFoundException;
 import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.UserRepository;
 import com.example.bankcards.util.CardMaskingUtil;
-
-import java.time.YearMonth;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -41,8 +42,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public CardDto getCardById(Long id) {
-        Card card = cardRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Card not found with id: " + id));
+        Card card = findActiveCard(id);
         return new CardDto(
             card.getId(),
             CardMaskingUtil.mask(card.getCardNumber()),
@@ -53,4 +53,38 @@ public class CardServiceImpl implements CardService {
         );
     }
 
+
+    @Override
+    public void setStatus(Long id, CardStatus status) {
+        Card card = findActiveCard(id);
+        card.setStatus(status);
+        cardRepository.save(card);
+    }
+
+    @Override
+    public void deleteCard(Long id) {
+        Card card = findActiveCard(id);
+        card.setIsDeleted(true);
+        cardRepository.save(card);
+    }
+
+    @Override
+    public Page<CardDto> getAllCards(Long userId, Pageable pageable) {
+        return cardRepository.findAllByUserIdAndIsDeletedFalse(userId, pageable)
+                .map(card -> new CardDto(
+                        card.getId(),
+                        CardMaskingUtil.mask(card.getCardNumber()),
+                        card.getOwnerName(),
+                        card.getExpiry().toString(),
+                        card.getStatus().name(),
+                        card.getUser().getId()
+                ));
+    }
+
+
+
+    private Card findActiveCard(Long id) {
+        return cardRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new CardNotFoundException("Card not found with id: " + id));
+    }
 }

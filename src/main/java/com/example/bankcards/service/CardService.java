@@ -1,9 +1,17 @@
 package com.example.bankcards.service;
 
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.example.bankcards.dto.CardCreationRequestDto;
 import com.example.bankcards.dto.CardDto;
+import com.example.bankcards.entity.CardStatus;
 
 public interface CardService {
     Long createCard(CardCreationRequestDto request);
-    CardDto getCardById(Long id);    
+    CardDto getCardById(Long id);  
+    void setStatus(Long id, CardStatus status);
+    void deleteCard(Long id);
+    Page<CardDto> getAllCards(Long userId, Pageable pageable);
 }

@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006-add-is-deleted-to-cards
+      author: devbaktiyarov
+      changes:
+        - addColumn:
+            tableName: cards
+            columns:
+              - column:
+                  name: is_deleted
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+      rollback:
+        - dropColumn:
+            columnName: is_deleted
+            tableName: cards
