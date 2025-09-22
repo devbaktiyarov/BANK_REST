@@ -7,3 +7,6 @@ databaseChangeLog:
         file: db/migration/003-add-last-refresh-token-to-users.yml
     - include:
         file: db/migration/004-add-admin-to-users.yml
+    - include:
+        file: db/migration/005-create-cards-table.yml
+

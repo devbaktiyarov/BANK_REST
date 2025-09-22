@@ -27,5 +27,9 @@ jwt:
   subject: ${JWT_SUBJECT:user}
   issuer: ${JWT_ISSUER:bank-rest}
 
+security:
+  encryption:
+    key: ${SECURITY_ENCRYPTION_KEY:0123456789abcdef0123456789abcdef}
+
 cors:
   allowed-origin: ${ALLOWED_ORIGIN:http://localhost:3000}
