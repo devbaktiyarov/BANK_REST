@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: "004-add-admin-to-users"
+      author: "devbaktiyarov"
+      changes:
+        - insert:
+            tableName: "users"
+            columns:
+              - column:
+                  name: "email"
+                  value: "${admin_email}"
+              - column:
+                  name: "password"
+                  value: "${admin_password}"    
+              - column:
+                  name: "role"
+                  value: "ROLE_ADMIN"
+      rollback:
+        - delete:
+            tableName: "users"
+            where: "email = '${admin_email}'"

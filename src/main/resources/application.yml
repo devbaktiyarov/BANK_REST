@@ -9,6 +9,9 @@ spring:
         format_sql: ${SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL:true}
 
   liquibase:
+    parameters:
+      admin_email: ${ADMIN_EMAIL:admin@admin.com}
+      admin_password: ${ADMIN_PASSWORD:$2a$12$okDllplHNk8bjwT7MiCJ7uYCCJiI4vnctMKKv9MqD0BrDP1NBSVsK}
     enabled: ${SPRING_LIQUIBASE_ENABLED:true}
     change-log: ${SPRING_LIQUIBASE_CHANGE_LOG:classpath:db/migration/db.changelog-master.yml}
 
