@@ -1,6 +1,5 @@
 package com.example.bankcards.security;
 
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,17 +24,17 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
     @Override
     public JwtTokenPairDto registerUser(RegistrationRequestDto requestDto) {
 
-        ValidationUtils.validateEmail(requestDto.getEmail());
-        ValidationUtils.validatePassword(requestDto.getPassword());
+        ValidationUtils.validateEmail(requestDto.email());
+        ValidationUtils.validatePassword(requestDto.password());
 
-        userRepository.findByEmail(requestDto.getEmail())
+        userRepository.findByEmail(requestDto.email())
                 .ifPresent(user -> {
                     throw new UserAlreadyExistsException("User with this email already exists");
                 });
 
         User user = new User();
-        user.setEmail(requestDto.getEmail());
-        user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+        user.setEmail(requestDto.email());
+        user.setPassword(passwordEncoder.encode(requestDto.password()));
         user.setRole(Role.ROLE_USER);
 
         String newAccessToken = jwtProvider.generateAccessToken(user);

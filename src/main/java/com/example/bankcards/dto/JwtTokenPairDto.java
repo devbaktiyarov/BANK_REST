@@ -1,13 +1,4 @@
 package com.example.bankcards.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+public record JwtTokenPairDto(String accessToken, String refreshToken) {}
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class JwtTokenPairDto {
-    private String accessToken;
-    private String refreshToken;
-}

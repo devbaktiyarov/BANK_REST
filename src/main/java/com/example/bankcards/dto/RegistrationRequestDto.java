@@ -1,13 +1,4 @@
 package com.example.bankcards.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+public record RegistrationRequestDto(String email, String password) {}
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class RegistrationRequestDto {
-    private String email;
-    private String password;
-}

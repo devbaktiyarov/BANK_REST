@@ -22,13 +22,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public JwtTokenPairDto login(AuthenticationRequestDto authRequest) {
-        ValidationUtils.validateEmail(authRequest.getEmail());
-        ValidationUtils.validatePassword(authRequest.getPassword());
+        ValidationUtils.validateEmail(authRequest.email());
+        ValidationUtils.validatePassword(authRequest.password());
 
-        User user = userRepository.findByEmail(authRequest.getEmail())
+        User user = userRepository.findByEmail(authRequest.email())
                 .orElseThrow(() -> new BadCredentialsException("Invalid email or password"));
 
-        if (!passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(authRequest.password(), user.getPassword())) {
             throw new BadCredentialsException("Invalid email or password");
         }
 
@@ -44,12 +44,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public JwtTokenPairDto refreshTokens(RefreshJwtTokenDto refreshRequest) {
-        String email = jwtProvider.validateRefreshToken(refreshRequest.getRefreshToken());
+        String email = jwtProvider.validateRefreshToken(refreshRequest.refreshToken());
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new BadCredentialsException("User not found"));
 
-        if (!refreshRequest.getRefreshToken().equals(user.getLastRefreshToken())) {
+        if (!refreshRequest.refreshToken().equals(user.getLastRefreshToken())) {
             throw new BadCredentialsException("Invalid refresh token");
         }
 
