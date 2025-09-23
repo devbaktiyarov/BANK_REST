@@ -13,5 +13,6 @@ public interface CardService {
     CardDto getCardById(Long id);  
     void setStatus(Long id, CardStatus status);
     void deleteCard(Long id);
-    Page<CardDto> getAllCards(Long userId, Pageable pageable);
+    Page<CardDto> getUsersAllCards(Long userId, Pageable pageable);
+    Page<CardDto> getAllCards(Pageable pageable);
 }

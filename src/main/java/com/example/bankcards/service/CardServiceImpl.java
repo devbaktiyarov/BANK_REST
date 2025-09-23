@@ -69,8 +69,21 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public Page<CardDto> getAllCards(Long userId, Pageable pageable) {
+    public Page<CardDto> getUsersAllCards(Long userId, Pageable pageable) {
         return cardRepository.findAllByUserIdAndIsDeletedFalse(userId, pageable)
+                .map(card -> new CardDto(
+                        card.getId(),
+                        CardMaskingUtil.mask(card.getCardNumber()),
+                        card.getOwnerName(),
+                        card.getExpiry().toString(),
+                        card.getStatus().name(),
+                        card.getUser().getId()
+                ));
+    }
+
+    @Override
+    public Page<CardDto> getAllCards(Pageable pageable) {
+        return cardRepository.findAll(pageable)
                 .map(card -> new CardDto(
                         card.getId(),
                         CardMaskingUtil.mask(card.getCardNumber()),
