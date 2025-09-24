@@ -10,9 +10,11 @@ import com.example.bankcards.entity.CardStatus;
 
 public interface CardService {
     Long createCard(CardCreationRequestDto request);
-    CardDto getCardById(Long id);  
+    CardDto getCardById(Long id);
+    CardDto getCardByIdAndUserId(Long id, Long userId);  
     void setStatus(Long id, CardStatus status);
     void deleteCard(Long id);
     Page<CardDto> getUsersAllCards(Long userId, Pageable pageable);
     Page<CardDto> getAllCards(Pageable pageable);
+    void addAmountToCard(Long cardId, String amount);
 }

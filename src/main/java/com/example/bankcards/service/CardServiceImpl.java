@@ -13,6 +13,7 @@ import com.example.bankcards.exception.CardNotFoundException;
 import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.UserRepository;
 import com.example.bankcards.util.CardMaskingUtil;
+import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -39,8 +40,6 @@ public class CardServiceImpl implements CardService {
         return savedCard.getId();
     }
 
-
-    @Override
     public CardDto getCardById(Long id) {
         Card card = findActiveCard(id);
         return new CardDto(
@@ -49,6 +48,21 @@ public class CardServiceImpl implements CardService {
             card.getOwnerName(),
             card.getExpiry().toString(),
             card.getStatus().name(),
+            card.getBalance(),
+            card.getUser().getId()
+        );
+    }
+
+    @Override
+    public CardDto getCardByIdAndUserId(Long id, Long userId) {
+        Card card = findActiveCard(id);
+        return new CardDto(
+            card.getId(),
+            CardMaskingUtil.mask(card.getCardNumber()),
+            card.getOwnerName(),
+            card.getExpiry().toString(),
+            card.getStatus().name(),
+            card.getBalance(),
             card.getUser().getId()
         );
     }
@@ -77,6 +91,7 @@ public class CardServiceImpl implements CardService {
                         card.getOwnerName(),
                         card.getExpiry().toString(),
                         card.getStatus().name(),
+                        card.getBalance(),
                         card.getUser().getId()
                 ));
     }
@@ -90,8 +105,18 @@ public class CardServiceImpl implements CardService {
                         card.getOwnerName(),
                         card.getExpiry().toString(),
                         card.getStatus().name(),
+                        card.getBalance(),
                         card.getUser().getId()
                 ));
+    }
+
+    @Override
+    public void addAmountToCard(Long cardId, String amount) {
+        Card card = findActiveCard(cardId);
+        BigDecimal currentBalance = card.getBalance();
+        BigDecimal amountToAdd = new BigDecimal(amount);
+        card.setBalance(currentBalance.add(amountToAdd));
+        cardRepository.save(card);
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.bankcards.controller;
 
+import com.example.bankcards.dto.CardAmountDto;
 import com.example.bankcards.dto.CardCreationRequestDto;
 import com.example.bankcards.dto.CardDto;
 import com.example.bankcards.dto.CardStatusRequestDto;
@@ -34,7 +35,8 @@ public class CardContoller {
     public ResponseEntity<Void> createCard(@AuthenticationPrincipal User currentUser, @RequestBody CardCreationRequestDto request) {
         authorizationService.authorizeAdmin(currentUser.getEmail());
         Long id = cardService.createCard(request);
-        return ResponseEntity.created(URI.create("/cards/" + id)).build();
+        URI location = URI.create("/v1/api/cards/" + id);
+        return ResponseEntity.created(location).build();
     }
 
 
@@ -55,12 +57,22 @@ public class CardContoller {
 
 
     @GetMapping("/my")
-    public Page<CardDto> getCards(
+    public Page<CardDto> getMyCards(
             @AuthenticationPrincipal User currentUser,
             @PageableDefault(size = 10, sort = "id") Pageable pageable
     ) {
         authorizationService.authorizeUser(currentUser.getEmail());
         return cardService.getUsersAllCards(currentUser.getId(), pageable);
+    }
+
+    @GetMapping("/my/{id}")
+    public ResponseEntity<CardDto> getMyCardById(
+            @AuthenticationPrincipal User currentUser,
+            @PathVariable Long id
+    ) {
+        authorizationService.authorizeUser(currentUser.getEmail());
+        CardDto card = cardService.getCardByIdAndUserId(id, currentUser.getId());
+        return ResponseEntity.ok(card);
     }
 
 
@@ -83,6 +95,17 @@ public class CardContoller {
     ) {
         authorizationService.authorizeAdmin(currentUser.getEmail());
         cardService.deleteCard(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/add")
+    public ResponseEntity<Void> addAmountToCard(
+            @AuthenticationPrincipal User currentUser,
+            @PathVariable Long id,
+            @RequestBody CardAmountDto request
+    ) {
+        authorizationService.authorizeAdmin(currentUser.getEmail());
+        cardService.addAmountToCard(id, request.amount());
         return ResponseEntity.noContent().build();
     }
 }
