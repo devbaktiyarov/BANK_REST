@@ -11,4 +11,5 @@ databaseChangeLog:
         file: db/migration/005-create-cards-table.yml
     - include:
         file: db/migration/006-add-is-deleted-to-cards.yml    
-
+    - include:
+        file: db/migration/007-create-transfers-table.yml
