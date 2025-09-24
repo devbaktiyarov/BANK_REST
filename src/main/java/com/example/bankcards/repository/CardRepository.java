@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface CardRepository extends JpaRepository<Card, Long> {
     Optional<Card> findByIdAndIsDeletedFalse(Long id);
     Page<Card> findAllByUserIdAndIsDeletedFalse(Long userId, Pageable pageable);
+    Optional<Card> findByCardNumberAndIsDeletedFalse(String cardNumber);
 }

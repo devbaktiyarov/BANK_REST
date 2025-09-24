@@ -9,6 +9,7 @@ import com.example.bankcards.dto.CardDto;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.CardStatus;
 import com.example.bankcards.entity.User;
+import com.example.bankcards.exception.CardAlreadyExistsException;
 import com.example.bankcards.exception.CardNotFoundException;
 import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.UserRepository;
@@ -29,6 +30,11 @@ public class CardServiceImpl implements CardService {
         User user = userRepository.findById(request.userId())
             .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
+        cardRepository.findByCardNumberAndIsDeletedFalse(request.cardNumber())
+            .ifPresent(card -> {
+                throw new CardAlreadyExistsException("Card number already exists");
+            });
+
         Card card = new Card();
         card.setCardNumber(request.cardNumber());
         card.setOwnerName(request.ownerName());
@@ -46,7 +52,7 @@ public class CardServiceImpl implements CardService {
             card.getId(),
             CardMaskingUtil.mask(card.getCardNumber()),
             card.getOwnerName(),
-            card.getExpiry().toString(),
+            card.getExpiry(),
             card.getStatus().name(),
             card.getBalance(),
             card.getUser().getId()
@@ -60,7 +66,7 @@ public class CardServiceImpl implements CardService {
             card.getId(),
             CardMaskingUtil.mask(card.getCardNumber()),
             card.getOwnerName(),
-            card.getExpiry().toString(),
+            card.getExpiry(),
             card.getStatus().name(),
             card.getBalance(),
             card.getUser().getId()
@@ -89,7 +95,7 @@ public class CardServiceImpl implements CardService {
                         card.getId(),
                         CardMaskingUtil.mask(card.getCardNumber()),
                         card.getOwnerName(),
-                        card.getExpiry().toString(),
+                        card.getExpiry(),
                         card.getStatus().name(),
                         card.getBalance(),
                         card.getUser().getId()
@@ -103,7 +109,7 @@ public class CardServiceImpl implements CardService {
                         card.getId(),
                         CardMaskingUtil.mask(card.getCardNumber()),
                         card.getOwnerName(),
-                        card.getExpiry().toString(),
+                        card.getExpiry(),
                         card.getStatus().name(),
                         card.getBalance(),
                         card.getUser().getId()
@@ -111,11 +117,10 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public void addAmountToCard(Long cardId, String amount) {
+    public void addAmountToCard(Long cardId, BigDecimal amount) {
         Card card = findActiveCard(cardId);
-        BigDecimal currentBalance = card.getBalance();
-        BigDecimal amountToAdd = new BigDecimal(amount);
-        card.setBalance(currentBalance.add(amountToAdd));
+        BigDecimal currentBalance = card.getBalance();;
+        card.setBalance(currentBalance.add(amount));
         cardRepository.save(card);
     }
 

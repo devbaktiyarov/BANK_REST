@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import com.example.bankcards.dto.CardCreationRequestDto;
 import com.example.bankcards.dto.CardDto;
 import com.example.bankcards.entity.CardStatus;
+import java.math.BigDecimal;
 
 public interface CardService {
     Long createCard(CardCreationRequestDto request);
@@ -16,5 +17,5 @@ public interface CardService {
     void deleteCard(Long id);
     Page<CardDto> getUsersAllCards(Long userId, Pageable pageable);
     Page<CardDto> getAllCards(Pageable pageable);
-    void addAmountToCard(Long cardId, String amount);
+    void addAmountToCard(Long cardId, BigDecimal amount);
 }

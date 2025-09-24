@@ -7,6 +7,7 @@ import com.example.bankcards.dto.CardStatusRequestDto;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.security.AuthorizationService;
 import com.example.bankcards.service.CardService;
+import jakarta.validation.Valid;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,7 @@ public class CardContoller {
     private final AuthorizationService authorizationService;
     
     @PostMapping
-    public ResponseEntity<Void> createCard(@AuthenticationPrincipal User currentUser, @RequestBody CardCreationRequestDto request) {
+    public ResponseEntity<Void> createCard(@AuthenticationPrincipal User currentUser, @RequestBody @Valid CardCreationRequestDto request) {
         authorizationService.authorizeAdmin(currentUser.getEmail());
         Long id = cardService.createCard(request);
         URI location = URI.create("/v1/api/cards/" + id);
@@ -80,7 +81,7 @@ public class CardContoller {
     public ResponseEntity<Void> setStatus(
             @AuthenticationPrincipal User currentUser,
             @PathVariable Long id,
-            @RequestBody CardStatusRequestDto request
+            @RequestBody @Valid CardStatusRequestDto request
     ) {
         authorizationService.authorizeAdmin(currentUser.getEmail());
         cardService.setStatus(id, request.status());
@@ -102,7 +103,7 @@ public class CardContoller {
     public ResponseEntity<Void> addAmountToCard(
             @AuthenticationPrincipal User currentUser,
             @PathVariable Long id,
-            @RequestBody CardAmountDto request
+            @RequestBody @Valid CardAmountDto request
     ) {
         authorizationService.authorizeAdmin(currentUser.getEmail());
         cardService.addAmountToCard(id, request.amount());
