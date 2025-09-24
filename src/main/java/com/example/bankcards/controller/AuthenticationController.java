@@ -4,6 +4,8 @@ import com.example.bankcards.dto.AuthenticationRequestDto;
 import com.example.bankcards.dto.JwtTokenPairDto;
 import com.example.bankcards.dto.RefreshJwtTokenDto;
 import com.example.bankcards.security.AuthenticationService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,12 +20,12 @@ public class AuthenticationController {
     private final AuthenticationService authService;
 
     @PostMapping("/sign-in")
-    public ResponseEntity<JwtTokenPairDto> login(@RequestBody AuthenticationRequestDto authRequest) {
+    public ResponseEntity<JwtTokenPairDto> login(@RequestBody @Valid AuthenticationRequestDto authRequest) {
         return ResponseEntity.ok(authService.login(authRequest));
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<JwtTokenPairDto> getNewRefreshToken(@RequestBody RefreshJwtTokenDto jwtRequestDto) {
+    public ResponseEntity<JwtTokenPairDto> getNewRefreshToken(@RequestBody @Valid RefreshJwtTokenDto jwtRequestDto) {
         return ResponseEntity.ok(authService.refreshTokens(jwtRequestDto));
     }
 

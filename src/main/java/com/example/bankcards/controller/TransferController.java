@@ -4,7 +4,7 @@ import com.example.bankcards.dto.TransferDto;
 import com.example.bankcards.dto.TransferRequestDto;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.service.TransferService;
-
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class TransferController {
     @PostMapping("/own")
     public ResponseEntity<TransferDto> transferBetweenOwnCards(
             @AuthenticationPrincipal User user,
-            @RequestBody TransferRequestDto request
+            @RequestBody @Valid TransferRequestDto request
     ) {
         TransferDto transfer = transferService.transferBetweenOwnCards(request, user);
         return ResponseEntity.ok(transfer);
