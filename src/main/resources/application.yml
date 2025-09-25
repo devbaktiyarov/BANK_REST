@@ -33,3 +33,14 @@ security:
 
 cors:
   allowed-origin: ${ALLOWED_ORIGIN:http://localhost:3000}
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    url: /openapi.yaml
+    urls:
+      - url: /openapi.yaml
+        name: Bank REST API
+

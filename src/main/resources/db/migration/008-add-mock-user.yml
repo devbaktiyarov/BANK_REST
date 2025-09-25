@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 008-add-mock-user
+      author: devbaktiyarov
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "user@example.com"
+              - column:
+                  name: password
+                  value: "$2a$12$hms8LMv.G50OHeuX5xQTAOLuL4vn1fPtbboFoWu8ATyk42fN9hX.q"
+              - column:
+                  name: role
+                  value: "ROLE_USER"
+
