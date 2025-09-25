@@ -3,6 +3,7 @@ package com.example.bankcards.exception;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -37,6 +38,12 @@ public class GlobalExceptionHandler {
         });
         return ResponseEntity.badRequest().body(errors);
     }
+
+    @ExceptionHandler(org.springframework.http.converter.HttpMessageNotReadableException.class)
+    public ResponseEntity<String> handleNotReadable(HttpMessageNotReadableException ex) {
+        return ResponseEntity.badRequest().body("Malformed JSON");
+    }
+
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<String> handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
